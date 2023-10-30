@@ -86,6 +86,7 @@ class AddComment extends Component {
             onClick={(e) => {
               e.preventDefault();
               this.addComment();
+              this.props.addChange();
             }}
             className="btn-sm"
           >

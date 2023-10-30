@@ -63,6 +63,7 @@ class SingleComment extends Component {
               className="btn-sm btn-danger"
               onClick={() => {
                 this.deleteComment();
+                this.props.addChange();
               }}
             >
               Delete

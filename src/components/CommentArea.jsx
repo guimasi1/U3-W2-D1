@@ -1,7 +1,7 @@
 import { Component } from "react";
 import CommentList from "./CommentList";
 import AddComment from "./AddComment";
-import { Spinner, Alert } from "react-bootstrap";
+import { Spinner, Alert, Button } from "react-bootstrap";
 
 const authorizationKey =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGU1MmY2ZTNkZDAwMTQ5NWU0MzYiLCJpYXQiOjE2OTgzMTk5NTQsImV4cCI6MTY5OTUyOTU1NH0._5f7a5FHV9rodonlw7xUBbjbAQ2k8EBEY3C8vROpRfQ";
@@ -14,6 +14,12 @@ class CommentArea extends Component {
     bookId: this.props.bookId,
     spinnerState: false,
     errorState: false,
+    numberOfChanges: 0,
+  };
+
+  addChange = () => {
+    this.setState({ numberOfChanges: this.state.numberOfChanges + 1 });
+    console.log("add change");
   };
 
   getSingleBook = () => {
@@ -49,7 +55,10 @@ class CommentArea extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.bookId !== this.props.bookId) {
       this.getSingleBook();
-      console.log(this.props.bookId, "BOOK ID DENTRO COMMENT AREA");
+    }
+    if (prevState.numberOfChanges !== this.state.numberOfChanges) {
+      console.log(prevState, "prevstate");
+      this.getSingleBook();
     }
   }
 
@@ -65,10 +74,12 @@ class CommentArea extends Component {
         </div>
         {this.state.errorState && <Alert variant={"danger"}>Error </Alert>}
         <CommentList
+          numberOfChanges={this.state.numberOfChanges}
           bookId={this.props.bookId}
           comments={this.state.comments}
+          addChange={this.addChange}
         />
-        <AddComment bookId={this.props.bookId} />
+        <AddComment addChange={this.addChange} bookId={this.props.bookId} />
       </div>
     );
   }
