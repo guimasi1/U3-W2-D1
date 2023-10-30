@@ -8,7 +8,7 @@ class CommentList extends Component {
     return (
       // {console.log(this.props.comments)}
 
-      <ListGroup>
+      <ListGroup className="mt-5">
         {this.props.comments.map((comment) => (
           <SingleComment key={comment._id} comment={comment} />
         ))}

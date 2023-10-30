@@ -48,6 +48,7 @@ class BookList extends Component {
         <Row>
           <Col className="d-flex gap-3 justify-content-center">
             <Button
+              className="btn-secondary"
               onClick={() => {
                 changeCategory(FantasyBooks);
               }}
@@ -55,6 +56,7 @@ class BookList extends Component {
               Fantasy
             </Button>
             <Button
+              className="btn-secondary"
               onClick={() => {
                 changeCategory(HistoryBooks);
               }}
@@ -62,6 +64,7 @@ class BookList extends Component {
               History
             </Button>
             <Button
+              className="btn-secondary"
               onClick={() => {
                 changeCategory(HorrorBooks);
               }}
@@ -69,6 +72,7 @@ class BookList extends Component {
               Horror
             </Button>
             <Button
+              className="btn-secondary"
               onClick={() => {
                 changeCategory(RomanceBooks);
               }}
@@ -76,6 +80,7 @@ class BookList extends Component {
               Romance
             </Button>
             <Button
+              className="btn-secondary"
               onClick={() => {
                 changeCategory(ScifiBooks);
               }}
@@ -85,8 +90,8 @@ class BookList extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={10}>
-            <Row xs={2} md={5} lg={6} className="mt-5 g-3 ">
+          <Col xs={8}>
+            <Row xs={2} md={3} lg={4} className="mt-5 g-3 ">
               {this.state.selectedCategory
                 .filter((book) =>
                   book.title
@@ -103,8 +108,12 @@ class BookList extends Component {
                 ))}
             </Row>
           </Col>
-          <Col xs={2}>
-            <CommentArea bookId={this.state.selectedAsin} />
+          <Col xs={4}>
+            <h4 className="mt-5">Reviews</h4>
+
+            {this.state.selectedAsin && (
+              <CommentArea bookId={this.state.selectedAsin} />
+            )}
           </Col>
         </Row>
       </Container>

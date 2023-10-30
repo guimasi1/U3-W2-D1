@@ -1,6 +1,7 @@
 import { Component } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import { Button } from "react-bootstrap";
+import { toHaveDisplayValue } from "@testing-library/jest-dom/matchers";
 const authorizationKey =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGU1MmY2ZTNkZDAwMTQ5NWU0MzYiLCJpYXQiOjE2OTgzMTk5NTQsImV4cCI6MTY5OTUyOTU1NH0._5f7a5FHV9rodonlw7xUBbjbAQ2k8EBEY3C8vROpRfQ";
 
@@ -49,6 +50,7 @@ class SingleComment extends Component {
         console.log(err);
       });
   };
+
   render() {
     return (
       <ListGroup.Item key={this.props.comment._id}>
@@ -57,7 +59,12 @@ class SingleComment extends Component {
             {this.props.comment.comment}
           </div>
           <div>
-            <Button className="btn-sm" onClick={this.deleteComment}>
+            <Button
+              className="btn-sm btn-danger"
+              onClick={() => {
+                this.deleteComment();
+              }}
+            >
               Delete
             </Button>
           </div>
