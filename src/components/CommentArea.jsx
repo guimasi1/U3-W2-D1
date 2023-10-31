@@ -1,29 +1,26 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import CommentList from "./CommentList";
 import AddComment from "./AddComment";
-import { Spinner, Alert, Button } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 
 const authorizationKey =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGU1MmY2ZTNkZDAwMTQ5NWU0MzYiLCJpYXQiOjE2OTgzMTk5NTQsImV4cCI6MTY5OTUyOTU1NH0._5f7a5FHV9rodonlw7xUBbjbAQ2k8EBEY3C8vROpRfQ";
 
 const urlToUse = "https://striveschool-api.herokuapp.com/api/comments/";
 
-class CommentArea extends Component {
-  state = {
-    comments: [],
-    bookId: this.props.bookId,
-    spinnerState: false,
-    errorState: false,
-    numberOfChanges: 0,
+function CommentArea({ bookId }) {
+  const [comments, setComments] = useState([]);
+  const [spinnerState, setSpinnerState] = useState(false);
+  const [errorState, setErrorState] = useState(false);
+  const [updateState, setUpdateState] = useState(0);
+
+  const update = () => {
+    setUpdateState(updateState + 1);
+    getSingleBook();
   };
 
-  addChange = () => {
-    this.setState({ numberOfChanges: this.state.numberOfChanges + 1 });
-    console.log("add change");
-  };
-
-  getSingleBook = () => {
-    fetch(urlToUse + this.props.bookId, {
+  const getSingleBook = () => {
+    fetch(urlToUse + bookId, {
       headers: {
         Authorization: authorizationKey,
       },
@@ -31,58 +28,51 @@ class CommentArea extends Component {
       .then((res) => {
         if (res.ok) {
           console.log("è andata a buon fine");
-
           return res.json();
         } else {
-          this.setState({ errorState: true });
+          setErrorState(true);
           throw new Error("non è andata a buon fine");
         }
       })
       .then((data) => {
         console.log(data);
-        this.setState({ comments: data });
-        this.setState({ spinnerState: true });
+        setComments(data);
+        setSpinnerState(true);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  componentDidMount() {
-    this.getSingleBook();
-  }
+  useEffect(() => {
+    getSingleBook();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    getSingleBook();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateState]);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.bookId !== this.props.bookId) {
-      this.getSingleBook();
-    }
-    if (prevState.numberOfChanges !== this.state.numberOfChanges) {
-      console.log(prevState, "prevstate");
-      this.getSingleBook();
-    }
-  }
+  useEffect(() => {
+    getSingleBook();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookId]);
 
-  render() {
-    return (
-      <div>
-        <div
-          className={`text-center ${
-            this.state.spinnerState ? "d-none" : "d-block"
-          }`}
-        >
-          <Spinner />
-        </div>
-        {this.state.errorState && <Alert variant={"danger"}>Error </Alert>}
-        <CommentList
-          numberOfChanges={this.state.numberOfChanges}
-          bookId={this.props.bookId}
-          comments={this.state.comments}
-          addChange={this.addChange}
-        />
-        <AddComment addChange={this.addChange} bookId={this.props.bookId} />
+  return (
+    <div>
+      <div className={`text-center ${spinnerState ? "d-none" : "d-block"}`}>
+        <Spinner />
       </div>
-    );
-  }
+      {errorState && <Alert variant={"danger"}>Error </Alert>}
+      <CommentList
+        update={update}
+        updateState={updateState}
+        bookId={bookId}
+        comments={comments}
+      />
+      <AddComment update={update} bookId={bookId} />
+    </div>
+  );
 }
 
 export default CommentArea;

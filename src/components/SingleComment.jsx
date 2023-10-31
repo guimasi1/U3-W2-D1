@@ -6,7 +6,7 @@ const authorizationKey =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTNhNGU1MmY2ZTNkZDAwMTQ5NWU0MzYiLCJpYXQiOjE2OTgzMTk5NTQsImV4cCI6MTY5OTUyOTU1NH0._5f7a5FHV9rodonlw7xUBbjbAQ2k8EBEY3C8vROpRfQ";
 
 const urlToUse = "https://striveschool-api.herokuapp.com/api/comments/";
-class SingleComment extends Component {
+const SingleComment = ({ comment, update }) => {
   //   getSingleBook = () => {
   //     fetch(urlToUse + this.props.bookId, {
   //       headers: {
@@ -32,8 +32,8 @@ class SingleComment extends Component {
   //       });
   //   };
 
-  deleteComment = () => {
-    fetch(urlToUse + this.props.comment._id, {
+  const deleteComment = () => {
+    fetch(urlToUse + comment._id, {
       method: "DELETE",
       headers: {
         Authorization: authorizationKey,
@@ -49,31 +49,27 @@ class SingleComment extends Component {
       .catch((err) => {
         console.log(err);
       });
+    update();
   };
 
-  render() {
-    return (
-      <ListGroup.Item key={this.props.comment._id}>
-        <div className="d-flex justify-content-between ">
-          <div className="d-flex align-items-center ">
-            {this.props.comment.comment}
-          </div>
-          <div>
-            <Button
-              className="btn-sm btn-danger"
-              onClick={() => {
-                this.deleteComment();
-                this.props.addChange();
-              }}
-            >
-              Delete
-            </Button>
-          </div>
+  return (
+    <ListGroup.Item key={comment._id}>
+      <div className="d-flex justify-content-between ">
+        <div className="d-flex align-items-center ">{comment.comment}</div>
+        <div>
+          <Button
+            className="btn-sm btn-danger"
+            onClick={() => {
+              deleteComment();
+              update();
+            }}
+          >
+            Delete
+          </Button>
         </div>
-      </ListGroup.Item>
-    );
-    // return <ListGroup.Item>this.props.comment</ListGroup.Item>;
-  }
-}
+      </div>
+    </ListGroup.Item>
+  );
+};
 
 export default SingleComment;

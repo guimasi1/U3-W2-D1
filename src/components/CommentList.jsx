@@ -1,34 +1,32 @@
-import { Component } from "react";
+import { Component, useEffect, useState } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import SingleComment from "./SingleComment";
 
-class CommentList extends Component {
-  state = {
-    numberOfChanges: this.props.numberOfChanges,
-  };
+const CommentList = ({ update, comments, updateState }) => {
+  // state = {
+  //   numberOfChanges: this.props.numberOfChanges,
+  // };
+  // const [numberOfChanges, setNumberOfChanges] = useState(numberOfChanges);
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.numberOfChanges !== this.state.numberOfChanges) {
-      this.props.addChange();
-    }
-  };
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   if (prevState.numberOfChanges !== this.state.numberOfChanges) {
+  //     this.props.addChange();
+  //   }
+  // };
 
-  render() {
-    console.log(this.props.comments);
-    return (
-      // {console.log(this.props.comments)}
+  useEffect(() => {
+    console.log("sono nel commentlist");
 
-      <ListGroup className="mt-5">
-        {this.props.comments.map((comment) => (
-          <SingleComment
-            addChange={this.props.addChange}
-            key={comment._id}
-            comment={comment}
-          />
-        ))}
-      </ListGroup>
-    );
-  }
-}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateState]);
+
+  return (
+    <ListGroup className="mt-5">
+      {comments.map((comment) => (
+        <SingleComment key={comment._id} update={update} comment={comment} />
+      ))}
+    </ListGroup>
+  );
+};
 
 export default CommentList;
